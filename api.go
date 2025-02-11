@@ -32,30 +32,8 @@ func (server *APIServer) Run() {
     router.HandleFunc("/api/task/{id}", makeHTTPHandlerFunc(server.HandleUpdateTask)).Methods("PUT")
     router.HandleFunc("/api/task/{id}", makeHTTPHandlerFunc(server.HandleDeleteTask)).Methods("DELETE")
 
-    /*
-        GET     /api/task
-        GET     /api/task/{id}
-        POST    /api/task
-        PUT     /api/task/{id}
-        DELETE  /api/task/{id}
-        
-    */
     http.ListenAndServe(server.listenAddr, router)
 }
-
-//  func (server *APIServer) HandleTask(w http.ResponseWriter, r *http.Request) error {
-//     switch r.Method {
-//     case http.MethodGet:
-//         return server.HandleGetTasks(w, r)
-//     case http.MethodPost:
-//         return server.HandleCreateTask(w, r)
-//     case http.MethodPut:
-//         return server.HandleUpdateTask(w, r)
-//     case http.MethodDelete:
-//         return server.HandleDeleteTask(w, r)
-//     }
-//     return fmt.Errorf("Method not allowed: %w", r.Method) 
-// }
 
 func (server *APIServer) HandleGetTasks(w http.ResponseWriter, r *http.Request) error {
     tasks, err := server.storage.GetTasks()
