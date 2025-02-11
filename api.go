@@ -96,6 +96,20 @@ func (server *APIServer) HandleCreateTask(w http.ResponseWriter, r *http.Request
 }
 
 func (server *APIServer) HandleUpdateTask(w http.ResponseWriter, r *http.Request) error {
+    id, err := getID(r)
+    if err != nil {
+        return err
+    }
+
+    modifiedTask := new(Task)
+    if err := json.NewDecoder(r.Body).Decode(modifiedTask); err != nil {
+        return err
+    }
+    
+    if err := server.storage.UpdateTask(id, modifiedTask); err != nil {
+        return err
+    }
+
     return nil
 }
 

@@ -9,7 +9,7 @@ import (
 type Storage interface {
 	CreateTask(*Task) error
 	DeleteTask(int) error
-	UpdateTask(*Task) error
+	UpdateTask(int, *Task) error
 	GetTaskByID(int) (*Task, error)
 	GetTasks() ([]*Task, error)
 }
@@ -94,11 +94,23 @@ func (p *PostgresDB) GetTaskByID(id int) (*Task, error) {
 }
 
 func (p *PostgresDB) DeleteTask(id int) error {
+    if _, err := p.GetTaskByID(id); err != nil {
+        return err
+    }
+
     _, err := p.db.Query("DELETE FROM task WHERE id = $1", id)
     return err
 }
 
-func (p *PostgresDB) UpdateTask(task *Task) error {
+func (p *PostgresDB) UpdateTask(id int, task *Task) error {
+
+    query := "UPDATE task SET title = $1, description = $2, completed = $3, timestamp = $4 WHERE id = $5"
+    res, err := p.db.Query(query, task.Title, task.Description, task.Completed, task.Timestamp, id)
+    if err != nil {
+        return err
+    }
+
+    fmt.Println(res)
     return nil
 }
 

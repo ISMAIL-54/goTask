@@ -15,6 +15,6 @@ func NewTask(title string, description string, completed bool) *Task {
         Title: title,
         Description: description,
         Completed: completed,
-        Timestamp: time.Now().UTC(),
+        Timestamp: time.Now(),
     }    
 }
